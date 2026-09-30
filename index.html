@@ -208,7 +208,7 @@ a { color: inherit; }
 .hero-cartao b { display: block; font-family: var(--f-titulo); font-size: 1.05rem; line-height: 1.2; }
 .hero-cartao small { font-size: .85rem; color: var(--texto-suave); line-height: 1.35; display: block; }
 
-/* ---------- Vídeo institucional: em pé (9:16) no celular, 16:9 inteiro no computador ---------- */
+/* ---------- Vídeo institucional (Short vertical, 9:16) ---------- */
 .video-grade { display: grid; gap: 2rem; }
 .video-txt { display: grid; gap: 1.1rem; justify-items: start; }
 .video-moldura {
@@ -228,8 +228,8 @@ a { color: inherit; }
 }
 .yt-play svg { width: 38px; height: 38px; margin-left: 4px; }
 .yt-fachada:hover .yt-play { transform: translate(-50%, -50%) scale(1.07); }
-/* O iframe é 16:9; ampliamos pra altura da moldura e centralizamos, mostrando só o centro vertical */
-.yt-iframe { position: absolute; top: 0; left: 50%; height: 100%; width: auto; aspect-ratio: 16 / 9; transform: translateX(-50%); border: 0; }
+/* O vídeo é um Short (vertical): ocupa a moldura inteira, sem recorte */
+.yt-iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 @media (max-width: 860px) {
 	/* No celular: título, vídeo e depois o botão */
 	.video-grade { gap: 1.1rem; }
@@ -239,10 +239,8 @@ a { color: inherit; }
 	.video-cta { order: 2; justify-self: stretch; }
 }
 @media (min-width: 861px) {
-	.video-grade { grid-template-columns: minmax(0, .75fr) minmax(0, 1.45fr); gap: clamp(2rem, 5vw, 4.5rem); align-items: center; }
-	.video-moldura { width: 100%; aspect-ratio: 16 / 9; justify-self: stretch; }
-	/* No computador o vídeo aparece inteiro, sem recorte, com os controles normais do YouTube */
-	.yt-iframe { left: 0; width: 100%; height: 100%; transform: none; }
+	.video-grade { grid-template-columns: 1fr auto; gap: clamp(3rem, 7vw, 6rem); align-items: center; }
+	.video-moldura { width: auto; height: min(540px, 70vh); }
 }
 
 /* Hero no computador: a foto acompanha a altura do texto, do selo até os destaques */
@@ -546,12 +544,9 @@ body.modal-aberto { overflow: hidden; }
 </section>
 
 <!-- =====================================================================
-     VÍDEO INSTITUCIONAL (YouTube)
-     O vídeo foi enviado ao YouTube em 16:9 com o conteúdo vertical no centro
-     e as laterais desfocadas. Aqui ele é exibido recortado no centro (9:16),
-     que é o formato que funciona no celular.
-     Pra trocar o vídeo, mude o ID em data-yt e no href (2 lugares).
-     Se no futuro subir o vídeo vertical como Short, o recorte continua certo.
+     VÍDEO INSTITUCIONAL (YouTube Short, vertical)
+     Pra trocar o vídeo, mude o ID em data-yt e no href (2 lugares) e a
+     imagem de capa. Use vídeos em pé (Shorts) pra ocupar a moldura inteira.
      ===================================================================== -->
 <section class="secao video-secao" aria-labelledby="video-titulo">
 	<div class="container video-grade">
@@ -563,12 +558,9 @@ body.modal-aberto { overflow: hidden; }
 			</a>
 		</div>
 		<div class="video-moldura revelar" data-atraso="1">
-			<!-- PERSONALIZAR: ID do vídeo no YouTube (o que vem depois de "watch?v=") -->
-			<a class="yt-fachada" id="yt-fachada" data-yt="qxpYbNJnAno" href="https://www.youtube.com/watch?v=qxpYbNJnAno" target="_blank" rel="noopener" aria-label="Assistir ao vídeo institucional da Carvalho Acabamentos">
-				<picture>
-					<source media="(min-width: 861px)" srcset="img/yt_poster_wide.webp" width="1280" height="720">
-					<img src="img/yt_poster.webp" loading="lazy" decoding="async" alt="" width="405" height="720">
-				</picture>
+			<!-- PERSONALIZAR: ID do vídeo no YouTube (o que vem depois de "shorts/" ou "watch?v="), em data-yt e no href -->
+			<a class="yt-fachada" id="yt-fachada" data-yt="E8parIvpCdo" href="https://www.youtube.com/shorts/E8parIvpCdo" target="_blank" rel="noopener" aria-label="Assistir ao vídeo institucional da Carvalho Acabamentos">
+				<img src="img/yt_poster.webp" loading="lazy" decoding="async" alt="" width="720" height="1280">
 				<span class="yt-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M8 5.5v13l11-6.5z"/></svg></span>
 			</a>
 		</div>
@@ -1063,8 +1055,7 @@ var WHATSAPP_MENSAGEM = 'Oi, vim pelo site e quero falar com um especialista.';
 			var id = fachada.getAttribute('data-yt');
 			var f = document.createElement('iframe');
 			f.className = 'yt-iframe';
-			var computador = window.matchMedia('(min-width: 861px)').matches; // no celular o vídeo é recortado, então sem controles
-			f.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&playsinline=1&rel=0&modestbranding=1&cc_load_policy=0&iv_load_policy=3&enablejsapi=1&origin=' + encodeURIComponent(location.origin) + '&controls=' + (computador ? 1 : 0) + '&loop=1&playlist=' + id;
+			f.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&playsinline=1&rel=0&modestbranding=1&cc_load_policy=0&iv_load_policy=3&enablejsapi=1&origin=' + encodeURIComponent(location.origin) + '&controls=1&loop=1&playlist=' + id;
 			f.title = 'Vídeo institucional da Carvalho Acabamentos';
 			f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
 			f.allowFullscreen = true;
