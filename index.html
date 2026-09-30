@@ -410,6 +410,8 @@ a { color: inherit; }
 .loja-modal-fechar svg { width: 20px; height: 20px; }
 .loja-modal-opcoes { display: grid; gap: .6rem; margin-top: .4rem; }
 .loja-opcao { display: flex; align-items: center; gap: .9rem; padding: 1rem 1.1rem; border-radius: 18px; background: var(--amarelo); color: var(--preto); text-decoration: none; transition: background-color .2s, transform .2s; }
+.loja-opcao { position: relative; }
+.loja-opcao.is-ultima::after { content: "Última escolha"; position: absolute; top: -9px; right: 14px; padding: .15rem .5rem; border-radius: 8px; background: var(--preto); color: var(--branco); font-family: var(--f-titulo); font-size: .68rem; font-weight: 600; letter-spacing: .04em; }
 .loja-opcao:hover { background: var(--amarelo-hover); transform: translateY(-1px); }
 .loja-opcao svg { width: 26px; height: 26px; flex: none; }
 .loja-opcao b { display: block; font-family: var(--f-titulo); font-size: 1.05rem; line-height: 1.25; }
@@ -894,9 +896,9 @@ body.modal-aberto { overflow: hidden; }
 <script>
 /* =====================================================================
    PERSONALIZAR: WhatsApp de cada loja (55 + DDD + número, só dígitos).
-   Todos os botões da página perguntam a loja na primeira vez e depois
-   vão direto pro WhatsApp da loja escolhida.
-   Link de anúncio já com a loja definida: ?loja=tramandai ou ?loja=sap
+   Todo clique num botão de WhatsApp pergunta a loja (a última escolhida
+   aparece marcada). Link de anúncio já com a loja definida pula a pergunta:
+   ?loja=tramandai ou ?loja=sap
    ===================================================================== */
 var LOJAS = {
 	tramandai: { nome: 'Tramandaí', numero: '5551995093190' }, /* WA-TRAMANDAI */
@@ -910,13 +912,12 @@ var WHATSAPP_MENSAGEM = 'Oi, vim pelo site e quero falar com um especialista.';
 
 	// ---------- Escolha de loja + WhatsApp ----------
 	var CHAVE = 'carvalho_loja';
-	function lerLoja() {
-		try {
-			var q = new URLSearchParams(location.search).get('loja');
-			if (q && LOJAS[q]) { localStorage.setItem(CHAVE, q); return q; }
-			var s = localStorage.getItem(CHAVE);
-			return s && LOJAS[s] ? s : null;
-		} catch (e) { return null; }
+	// Loja definida pelo link do anúncio (?loja=...). Sem isso, sempre pergunta.
+	function lojaDoAnuncio() {
+		try { var q = new URLSearchParams(location.search).get('loja'); return q && LOJAS[q] ? q : null; } catch (e) { return null; }
+	}
+	function ultimaLoja() {
+		try { var s = localStorage.getItem(CHAVE); return s && LOJAS[s] ? s : null; } catch (e) { return null; }
 	}
 	function salvarLoja(l) { try { localStorage.setItem(CHAVE, l); } catch (e) {} }
 	function linkWa(loja, msg) {
@@ -934,12 +935,17 @@ var WHATSAPP_MENSAGEM = 'Oi, vim pelo site e quero falar com um especialista.';
 	var ultimoFoco = null;
 	function abrirModal(botao) {
 		pendente = botao; ultimoFoco = document.activeElement;
+		var ultima = ultimaLoja();
 		modal.querySelectorAll('[data-loja]').forEach(function (op) {
-			op.href = linkWa(op.getAttribute('data-loja'), botao.dataset.msg);
+			var l = op.getAttribute('data-loja');
+			op.href = linkWa(l, botao.dataset.msg);
+			op.classList.toggle('is-ultima', l === ultima);
 		});
 		modal.hidden = false;
 		document.body.classList.add('modal-aberto');
-		var primeiro = modal.querySelector('[data-loja]'); if (primeiro) primeiro.focus();
+		window.dataLayer = window.dataLayer || [];
+		window.dataLayer.push({ event: 'abriu_escolha_loja', wa_origem: botao.getAttribute('data-origem') || '' });
+		var foco = modal.querySelector('.is-ultima') || modal.querySelector('[data-loja]'); if (foco) foco.focus();
 	}
 	function fecharModal() {
 		modal.hidden = true; pendente = null;
@@ -964,10 +970,9 @@ var WHATSAPP_MENSAGEM = 'Oi, vim pelo site e quero falar com um especialista.';
 		var msg = WHATSAPP_MENSAGEM;
 		try { msg = new URL(a.href).searchParams.get('text') || msg; } catch (e) {}
 		a.dataset.msg = msg;
-		var inicial = lerLoja() || 'tramandai';
-		a.href = linkWa(inicial, msg); // funciona mesmo sem JavaScript
+		a.href = linkWa(lojaDoAnuncio() || 'tramandai', msg); // funciona mesmo sem JavaScript
 		a.addEventListener('click', function (ev) {
-			var loja = lerLoja();
+			var loja = lojaDoAnuncio();
 			if (loja) {
 				a.href = linkWa(loja, msg);
 				registrar(a.getAttribute('data-origem'), loja);
