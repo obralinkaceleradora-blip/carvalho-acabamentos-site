@@ -401,6 +401,27 @@ a { color: inherit; }
 .flutuante.visivel { transform: none; }
 .flutuante svg { width: 32px; height: 32px; }
 
+/* ---------- Janela de escolha de loja ---------- */
+.loja-modal { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(0,0,0,.62); animation: modal-fundo .2s ease; }
+.loja-modal[hidden] { display: none; }
+.loja-modal-caixa { position: relative; width: 100%; max-width: 440px; background: var(--branco); color: var(--texto); border-radius: var(--raio); padding: 1.8rem 1.5rem 1.5rem; display: grid; gap: .8rem; box-shadow: 0 30px 60px -20px rgba(0,0,0,.5); animation: modal-sobe .25s ease; }
+.loja-modal-titulo { font-family: var(--f-titulo); font-weight: 700; font-size: 1.45rem; line-height: 1.2; letter-spacing: -.02em; padding-right: 2.5rem; }
+.loja-modal-fechar { position: absolute; top: 14px; right: 14px; width: 40px; height: 40px; border: 0; border-radius: 12px; background: var(--cinza-claro); color: var(--texto); cursor: pointer; display: grid; place-items: center; }
+.loja-modal-fechar svg { width: 20px; height: 20px; }
+.loja-modal-opcoes { display: grid; gap: .6rem; margin-top: .4rem; }
+.loja-opcao { display: flex; align-items: center; gap: .9rem; padding: 1rem 1.1rem; border-radius: 18px; background: var(--amarelo); color: var(--preto); text-decoration: none; transition: background-color .2s, transform .2s; }
+.loja-opcao:hover { background: var(--amarelo-hover); transform: translateY(-1px); }
+.loja-opcao svg { width: 26px; height: 26px; flex: none; }
+.loja-opcao b { display: block; font-family: var(--f-titulo); font-size: 1.05rem; line-height: 1.25; }
+.loja-opcao small { display: block; font-size: .85rem; opacity: .8; }
+body.modal-aberto { overflow: hidden; }
+@keyframes modal-fundo { from { opacity: 0; } }
+@keyframes modal-sobe { from { transform: translateY(16px); opacity: 0; } }
+@media (max-width: 560px) {
+	.loja-modal { align-items: flex-end; padding: 0; }
+	.loja-modal-caixa { max-width: none; border-radius: 28px 28px 0 0; padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px)); }
+}
+
 /* ---------- Animações de entrada (só com JS ativo) ---------- */
 .js .revelar { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
 .js .revelar.visto { opacity: 1; transform: none; }
@@ -458,6 +479,7 @@ a { color: inherit; }
 	html { scroll-behavior: auto; }
 	.js .revelar { opacity: 1; transform: none; transition: none; }
 	.btn, .flutuante { transition: none; }
+	.loja-modal, .loja-modal-caixa { animation: none; }
 }
 </style>
 </head>
@@ -843,31 +865,116 @@ a { color: inherit; }
 	</div>
 </footer>
 
+<!-- Janela de escolha de loja (aparece no primeiro clique em qualquer botão de WhatsApp) -->
+<div class="loja-modal" id="loja-modal" role="dialog" aria-modal="true" aria-labelledby="loja-modal-titulo" hidden>
+	<div class="loja-modal-caixa">
+		<button class="loja-modal-fechar" type="button" data-fechar aria-label="Fechar">
+			<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+		</button>
+		<p class="selo">Atendimento pelo WhatsApp</p>
+		<h2 id="loja-modal-titulo" class="loja-modal-titulo">Qual loja fica mais perto de você?</h2>
+		<div class="loja-modal-opcoes">
+			<a class="loja-opcao" data-loja="tramandai" href="#" target="_blank" rel="noopener">
+				<svg aria-hidden="true"><use href="#i-wa"/></svg>
+				<span><b>Tramandaí</b><small>Av. Fernandes Bastos, 944, Centro</small></span>
+			</a>
+			<a class="loja-opcao" data-loja="sap" href="#" target="_blank" rel="noopener">
+				<svg aria-hidden="true"><use href="#i-wa"/></svg>
+				<!-- PERSONALIZAR: endereço da loja de Santo Antônio -->
+				<span><b>Santo Antônio da Patrulha</b><small>Santo Antônio da Patrulha, RS</small></span>
+			</a>
+		</div>
+	</div>
+</div>
+
 <a class="flutuante js-wa" data-origem="botao-flutuante" href="https://wa.me/5551995093190?text=Oi%2C%20vim%20pelo%20site%20e%20quero%20falar%20com%20um%20especialista." target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
 	<svg aria-hidden="true"><use href="#i-wa"/></svg>
 </a>
 
 <script>
 /* =====================================================================
-   PERSONALIZAR: número do WhatsApp (55 + DDD + número, só dígitos)
-   e mensagem padrão. Todos os botões da página usam este número.
+   PERSONALIZAR: WhatsApp de cada loja (55 + DDD + número, só dígitos).
+   Todos os botões da página perguntam a loja na primeira vez e depois
+   vão direto pro WhatsApp da loja escolhida.
+   Link de anúncio já com a loja definida: ?loja=tramandai ou ?loja=sap
    ===================================================================== */
-var WHATSAPP_NUMERO = '5551995093190';
+var LOJAS = {
+	tramandai: { nome: 'Tramandaí', numero: '5551995093190' }, /* WA-TRAMANDAI */
+	sap: { nome: 'Santo Antônio da Patrulha', numero: '5551995093190' } /* WA-SAP: trocar pelo número da loja de Santo Antônio */
+};
 var WHATSAPP_MENSAGEM = 'Oi, vim pelo site e quero falar com um especialista.';
 
 (function () {
 	var doc = document.documentElement;
 	doc.classList.add('js');
 
-	// Aplica o número em todos os botões, mantendo a mensagem de cada um
-	var botoes = document.querySelectorAll('a.js-wa');
-	botoes.forEach(function (a) {
+	// ---------- Escolha de loja + WhatsApp ----------
+	var CHAVE = 'carvalho_loja';
+	function lerLoja() {
+		try {
+			var q = new URLSearchParams(location.search).get('loja');
+			if (q && LOJAS[q]) { localStorage.setItem(CHAVE, q); return q; }
+			var s = localStorage.getItem(CHAVE);
+			return s && LOJAS[s] ? s : null;
+		} catch (e) { return null; }
+	}
+	function salvarLoja(l) { try { localStorage.setItem(CHAVE, l); } catch (e) {} }
+	function linkWa(loja, msg) {
+		var nome = LOJAS[loja].nome;
+		var texto = msg.indexOf('vim pelo site') > -1 ? msg.replace('vim pelo site', 'vim pelo site (loja ' + nome + ')') : msg + ' (loja ' + nome + ')';
+		return 'https://wa.me/' + LOJAS[loja].numero + '?text=' + encodeURIComponent(texto);
+	}
+	function registrar(origem, loja) {
+		window.dataLayer = window.dataLayer || [];
+		window.dataLayer.push({ event: 'clique_whatsapp', wa_origem: origem || '', wa_loja: loja });
+	}
+
+	var modal = document.getElementById('loja-modal');
+	var pendente = null; // botão que abriu a janela
+	var ultimoFoco = null;
+	function abrirModal(botao) {
+		pendente = botao; ultimoFoco = document.activeElement;
+		modal.querySelectorAll('[data-loja]').forEach(function (op) {
+			op.href = linkWa(op.getAttribute('data-loja'), botao.dataset.msg);
+		});
+		modal.hidden = false;
+		document.body.classList.add('modal-aberto');
+		var primeiro = modal.querySelector('[data-loja]'); if (primeiro) primeiro.focus();
+	}
+	function fecharModal() {
+		modal.hidden = true; pendente = null;
+		document.body.classList.remove('modal-aberto');
+		if (ultimoFoco && ultimoFoco.focus) ultimoFoco.focus();
+	}
+	if (modal) {
+		modal.addEventListener('click', function (e) {
+			if (e.target === modal || e.target.closest('[data-fechar]')) { fecharModal(); return; }
+			var op = e.target.closest('[data-loja]');
+			if (op && pendente) {
+				var loja = op.getAttribute('data-loja');
+				salvarLoja(loja);
+				registrar(pendente.getAttribute('data-origem'), loja);
+				setTimeout(fecharModal, 50); // o link abre o WhatsApp numa nova aba
+			}
+		});
+		document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !modal.hidden) fecharModal(); });
+	}
+
+	document.querySelectorAll('a.js-wa').forEach(function (a) {
 		var msg = WHATSAPP_MENSAGEM;
 		try { msg = new URL(a.href).searchParams.get('text') || msg; } catch (e) {}
-		a.href = 'https://wa.me/' + WHATSAPP_NUMERO + '?text=' + encodeURIComponent(msg);
-		a.addEventListener('click', function () {
-			window.dataLayer = window.dataLayer || [];
-			window.dataLayer.push({ event: 'clique_whatsapp', wa_origem: a.getAttribute('data-origem') || '' });
+		a.dataset.msg = msg;
+		var inicial = lerLoja() || 'tramandai';
+		a.href = linkWa(inicial, msg); // funciona mesmo sem JavaScript
+		a.addEventListener('click', function (ev) {
+			var loja = lerLoja();
+			if (loja) {
+				a.href = linkWa(loja, msg);
+				registrar(a.getAttribute('data-origem'), loja);
+			} else if (modal) {
+				ev.preventDefault();
+				abrirModal(a);
+			}
 		});
 	});
 
