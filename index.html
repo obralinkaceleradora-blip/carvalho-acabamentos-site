@@ -302,6 +302,7 @@ a { color: inherit; }
 /* ---------- Nossas lojas ---------- */
 .lojas-grade { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
 .loja-card { border-radius: var(--raio-grande); overflow: hidden; background: var(--cinza-claro); display: grid; grid-template-rows: auto 1fr; }
+.secao--cinza .loja-card { background: var(--branco); }
 .loja-fotos { position: relative; aspect-ratio: 4 / 3; background: var(--escuro); }
 .loja-fotos > img { width: 100%; height: 100%; object-fit: cover; }
 .loja-fotos > .loja-mini { position: absolute; right: 14px; bottom: 14px; width: 34%; height: auto; aspect-ratio: 1; object-fit: cover; border-radius: 22px; border: 4px solid var(--branco); }
@@ -689,9 +690,42 @@ body.modal-aberto { overflow: hidden; }
 </section>
 
 <!-- =====================================================================
-     6. COMO FUNCIONA
+     6. DOR / PROBLEMA
      ===================================================================== -->
-<section class="secao secao--cinza" aria-labelledby="passos-titulo">
+<section class="secao secao--cinza" aria-labelledby="dor-titulo">
+	<div class="container">
+		<div class="cabeca revelar">
+			<p class="selo">A gente sabe como é</p>
+			<h2 id="dor-titulo" class="titulo">Construir ou reformar já dá trabalho. <em>Comprar o acabamento</em> não deveria dar mais.</h2>
+		</div>
+		<ul class="dores">
+			<li class="dor revelar">
+				<span class="dor-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.2a2.6 2.6 0 1 1 3.6 2.4c-.7.3-1.1.9-1.1 1.6v.6M12 17h.01"/></svg></span>
+				<h3>Medo de escolher errado</h3>
+				<p>Depois de assentado não tem volta. E no catálogo tudo parece igual.</p>
+			</li>
+			<li class="dor revelar" data-atraso="1">
+				<span class="dor-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+				<h3>Obra parada esperando material</h3>
+				<p>"Chega semana que vem" vira quinze dias. E o pedreiro cobra a diária do mesmo jeito.</p>
+			</li>
+			<li class="dor revelar" data-atraso="2">
+				<span class="dor-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 18c1.5-3 4.3-4.5 8-4.5s6.5 1.5 8 4.5"/><circle cx="12" cy="7.5" r="3.5"/><path d="M17 4l3 3M20 4l-3 3"/></svg></span>
+				<h3>Atendimento que não entende de obra</h3>
+				<p>Vendedor que empurra o que tem na prateleira em vez de resolver o seu ambiente.</p>
+			</li>
+		</ul>
+		<div class="virada revelar">
+			<img src="img/symbol-b8b1fb87.png" alt="" width="52" height="52">
+			<p>Na Carvalho, a gente resolve essas três coisas <span>de uma vez só.</span></p>
+		</div>
+	</div>
+</section>
+
+<!-- =====================================================================
+     7. COMO FUNCIONA
+     ===================================================================== -->
+<section class="secao" aria-labelledby="passos-titulo">
 	<div class="container">
 		<div class="cabeca cabeca--centro revelar">
 			<p class="selo">Como funciona</p>
@@ -712,12 +746,12 @@ body.modal-aberto { overflow: hidden; }
 </section>
 
 <!-- =====================================================================
-     7. NOSSAS LOJAS
+     8. NOSSAS LOJAS
      PERSONALIZAR: fotos das lojas. A de Santo Antônio está com um espaço
      reservado: troque o bloco "loja-foto-breve" por
      <img src="URL-DA-FOTO" alt="Fachada da loja de Santo Antônio da Patrulha">
      ===================================================================== -->
-<section class="secao" aria-labelledby="lojas-titulo">
+<section class="secao secao--cinza" aria-labelledby="lojas-titulo">
 	<div class="container">
 		<div class="cabeca revelar">
 			<p class="selo">Nossas lojas</p>
@@ -756,39 +790,6 @@ body.modal-aberto { overflow: hidden; }
 				<svg aria-hidden="true"><use href="#i-wa"/></svg>Quero agendar minha visita
 			</a>
 			<p class="btn-nota">Resposta rápida no WhatsApp</p>
-		</div>
-	</div>
-</section>
-
-<!-- =====================================================================
-     8. DOR / PROBLEMA
-     ===================================================================== -->
-<section class="secao secao--cinza" aria-labelledby="dor-titulo">
-	<div class="container">
-		<div class="cabeca revelar">
-			<p class="selo">A gente sabe como é</p>
-			<h2 id="dor-titulo" class="titulo">Construir ou reformar já dá trabalho. <em>Comprar o acabamento</em> não deveria dar mais.</h2>
-		</div>
-		<ul class="dores">
-			<li class="dor revelar">
-				<span class="dor-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.2a2.6 2.6 0 1 1 3.6 2.4c-.7.3-1.1.9-1.1 1.6v.6M12 17h.01"/></svg></span>
-				<h3>Medo de escolher errado</h3>
-				<p>Depois de assentado não tem volta. E no catálogo tudo parece igual.</p>
-			</li>
-			<li class="dor revelar" data-atraso="1">
-				<span class="dor-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
-				<h3>Obra parada esperando material</h3>
-				<p>"Chega semana que vem" vira quinze dias. E o pedreiro cobra a diária do mesmo jeito.</p>
-			</li>
-			<li class="dor revelar" data-atraso="2">
-				<span class="dor-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 18c1.5-3 4.3-4.5 8-4.5s6.5 1.5 8 4.5"/><circle cx="12" cy="7.5" r="3.5"/><path d="M17 4l3 3M20 4l-3 3"/></svg></span>
-				<h3>Atendimento que não entende de obra</h3>
-				<p>Vendedor que empurra o que tem na prateleira em vez de resolver o seu ambiente.</p>
-			</li>
-		</ul>
-		<div class="virada revelar">
-			<img src="img/symbol-b8b1fb87.png" alt="" width="52" height="52">
-			<p>Na Carvalho, a gente resolve essas três coisas <span>de uma vez só.</span></p>
 		</div>
 	</div>
 </section>
