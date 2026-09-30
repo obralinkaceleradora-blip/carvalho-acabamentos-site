@@ -208,7 +208,7 @@ a { color: inherit; }
 .hero-cartao b { display: block; font-family: var(--f-titulo); font-size: 1.05rem; line-height: 1.2; }
 .hero-cartao small { font-size: .85rem; color: var(--texto-suave); line-height: 1.35; display: block; }
 
-/* ---------- Vídeo institucional (9:16, pensado primeiro pro celular) ---------- */
+/* ---------- Vídeo institucional: em pé (9:16) no celular, 16:9 inteiro no computador ---------- */
 .video-grade { display: grid; gap: 2rem; }
 .video-txt { display: grid; gap: 1.1rem; justify-items: start; }
 .video-moldura {
@@ -218,7 +218,7 @@ a { color: inherit; }
 	box-shadow: 0 30px 60px -30px rgba(0,0,0,.55);
 }
 .yt-fachada { position: absolute; inset: 0; display: block; color: var(--branco); text-decoration: none; }
-.yt-fachada img { width: 100%; height: 100%; object-fit: cover; }
+.yt-fachada picture, .yt-fachada img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .yt-fachada::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,0) 45%); }
 .yt-play {
 	position: absolute; left: 50%; top: 50%; z-index: 1; transform: translate(-50%, -50%);
@@ -239,8 +239,10 @@ a { color: inherit; }
 	.video-cta { order: 2; justify-self: stretch; }
 }
 @media (min-width: 861px) {
-	.video-grade { grid-template-columns: 1fr auto; gap: clamp(3rem, 7vw, 6rem); align-items: center; }
-	.video-moldura { width: auto; height: min(540px, 70vh); }
+	.video-grade { grid-template-columns: minmax(0, .75fr) minmax(0, 1.45fr); gap: clamp(2rem, 5vw, 4.5rem); align-items: center; }
+	.video-moldura { width: 100%; aspect-ratio: 16 / 9; justify-self: stretch; }
+	/* No computador o vídeo aparece inteiro, sem recorte, com os controles normais do YouTube */
+	.yt-iframe { left: 0; width: 100%; height: 100%; transform: none; }
 }
 
 /* Hero no computador: a foto acompanha a altura do texto, do selo até os destaques */
@@ -563,7 +565,10 @@ body.modal-aberto { overflow: hidden; }
 		<div class="video-moldura revelar" data-atraso="1">
 			<!-- PERSONALIZAR: ID do vídeo no YouTube (o que vem depois de "watch?v=") -->
 			<a class="yt-fachada" id="yt-fachada" data-yt="qxpYbNJnAno" href="https://www.youtube.com/watch?v=qxpYbNJnAno" target="_blank" rel="noopener" aria-label="Assistir ao vídeo institucional da Carvalho Acabamentos">
-				<img src="img/yt_poster.webp" loading="lazy" decoding="async" alt="" width="405" height="720">
+				<picture>
+					<source media="(min-width: 861px)" srcset="img/yt_poster_wide.webp" width="1280" height="720">
+					<img src="img/yt_poster.webp" loading="lazy" decoding="async" alt="" width="405" height="720">
+				</picture>
 				<span class="yt-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M8 5.5v13l11-6.5z"/></svg></span>
 			</a>
 		</div>
@@ -1058,7 +1063,8 @@ var WHATSAPP_MENSAGEM = 'Oi, vim pelo site e quero falar com um especialista.';
 			var id = fachada.getAttribute('data-yt');
 			var f = document.createElement('iframe');
 			f.className = 'yt-iframe';
-			f.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&playsinline=1&rel=0&modestbranding=1&controls=0&loop=1&playlist=' + id;
+			var computador = window.matchMedia('(min-width: 861px)').matches; // no celular o vídeo é recortado, então sem controles
+			f.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&playsinline=1&rel=0&modestbranding=1&cc_load_policy=0&iv_load_policy=3&controls=' + (computador ? 1 : 0) + '&loop=1&playlist=' + id;
 			f.title = 'Vídeo institucional da Carvalho Acabamentos';
 			f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
 			f.allowFullscreen = true;
