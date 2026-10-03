@@ -300,7 +300,7 @@ a { color: inherit; }
 .estoque-numeros span { color: var(--texto-claro); line-height: 1.4; }
 
 /* ---------- Nossas lojas ---------- */
-.lojas-grade { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+.lojas-grade { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
 .loja-card { border-radius: var(--raio-grande); overflow: hidden; background: var(--cinza-claro); display: grid; grid-template-rows: auto 1fr; }
 .secao--cinza .loja-card { background: var(--branco); }
 .loja-fotos { position: relative; aspect-ratio: 4 / 3; background: var(--escuro); }
@@ -311,6 +311,7 @@ a { color: inherit; }
 .loja-info { padding: 1.5rem 1.6rem 1.8rem; display: grid; gap: .35rem; align-content: start; }
 .loja-info h3 { font-family: var(--f-titulo); font-size: 1.35rem; }
 .loja-info p { color: var(--texto-suave); }
+.loja-info .loja-tipo { font-family: var(--f-titulo); font-weight: 600; font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; color: var(--texto); margin-bottom: .1rem; }
 .loja-info a { font-weight: 700; color: var(--texto); margin-top: .4rem; }
 
 /* ---------- 4. Como funciona ---------- */
@@ -416,7 +417,7 @@ a { color: inherit; }
 .loja-opcao:hover { background: var(--amarelo-hover); transform: translateY(-1px); }
 .loja-opcao svg { width: 26px; height: 26px; flex: none; }
 .loja-opcao b { display: block; font-family: var(--f-titulo); font-size: 1.05rem; line-height: 1.25; }
-.loja-opcao small { display: block; font-size: .85rem; opacity: .8; }
+.loja-opcao small { display: inline-block; margin-top: .25rem; padding: .1rem .5rem; border-radius: 8px; background: rgba(0,0,0,.1); font-size: .76rem; font-weight: 600; }
 body.modal-aberto { overflow: hidden; }
 @keyframes modal-fundo { from { opacity: 0; } }
 @keyframes modal-sobe { from { transform: translateY(16px); opacity: 0; } }
@@ -755,8 +756,8 @@ body.modal-aberto { overflow: hidden; }
 	<div class="container">
 		<div class="cabeca revelar">
 			<p class="selo">Nossas lojas</p>
-			<h2 id="lojas-titulo" class="titulo">Uma loja de verdade, com estoque de verdade. <em>E agora são duas.</em></h2>
-			<p class="lead">Pode vir conhecer. Em Tramandaí ou em Santo Antônio da Patrulha, você vê as peças de perto e sai com a obra resolvida.</p>
+			<h2 id="lojas-titulo" class="titulo">Uma rede de lojas de verdade, <em>com estoque de verdade.</em></h2>
+			<p class="lead">São três lojas no litoral norte e região. Escolhe a mais perto, vê as peças de perto e sai com a obra resolvida.</p>
 		</div>
 		<div class="lojas-grade">
 			<article class="loja-card revelar">
@@ -766,6 +767,7 @@ body.modal-aberto { overflow: hidden; }
 				</div>
 				<div class="loja-info">
 					<h3>Tramandaí</h3>
+					<p class="loja-tipo">Acabamentos</p>
 					<p>Av. Fernandes Bastos, 944, Centro, Tramandaí, RS</p>
 					<a href="https://www.google.com/maps/search/?api=1&amp;query=Carvalho+Acabamentos+Av.+Fernandes+Bastos+944+Tramandai+RS" target="_blank" rel="noopener">Ver no mapa</a>
 				</div>
@@ -779,9 +781,26 @@ body.modal-aberto { overflow: hidden; }
 				</div>
 				<div class="loja-info">
 					<h3>Santo Antônio da Patrulha</h3>
+					<p class="loja-tipo">Acabamentos</p>
 					<!-- PERSONALIZAR: endereço da loja de Santo Antônio e link do mapa -->
 					<p>[Endereço], Santo Antônio da Patrulha, RS</p>
 					<a href="https://www.google.com/maps/search/?api=1&amp;query=Carvalho+Acabamentos+Santo+Antonio+da+Patrulha+RS" target="_blank" rel="noopener">Ver no mapa</a>
+				</div>
+			</article>
+			<article class="loja-card revelar" data-atraso="2">
+				<div class="loja-fotos">
+					<div class="loja-foto-breve">
+						<img src="img/symbol-b8b1fb87.png" alt="">
+						<span>Foto da Carvalho Materiais de Construção</span>
+					</div>
+				</div>
+				<div class="loja-info">
+					<h3>Imbé</h3>
+					<p class="loja-tipo">Acabamentos e material de construção</p>
+					<p>Carvalho Materiais de Construção</p>
+					<!-- PERSONALIZAR: endereço da loja de Imbé e link do mapa -->
+					<p>[Endereço], Imbé, RS</p>
+					<a href="https://www.google.com/maps/search/?api=1&amp;query=Carvalho+Materiais+de+Construcao+Imbe+RS" target="_blank" rel="noopener">Ver no mapa</a>
 				</div>
 			</article>
 		</div>
@@ -824,7 +843,7 @@ body.modal-aberto { overflow: hidden; }
 			</details>
 			<details class="revelar" data-atraso="2">
 				<summary>Posso ver as peças antes de comprar?</summary>
-				<p>Pode e deve. Nossas lojas em Tramandaí e em Santo Antônio da Patrulha têm porcelanatos expostos, louças montadas e metais na bancada.</p>
+				<p>Pode e deve. Nossas lojas em Tramandaí, Santo Antônio da Patrulha e Imbé têm porcelanatos expostos, louças montadas e metais na bancada. Em Imbé você também encontra material de construção.</p>
 			</details>
 		</div>
 	</div>
@@ -873,12 +892,15 @@ body.modal-aberto { overflow: hidden; }
 		<div class="loja-modal-opcoes">
 			<a class="loja-opcao" data-loja="tramandai" href="#" target="_blank" rel="noopener">
 				<svg aria-hidden="true"><use href="#i-wa"/></svg>
-				<span><b>Tramandaí</b><small>Av. Fernandes Bastos, 944, Centro</small></span>
+				<span><b>Tramandaí</b><small>Acabamentos</small></span>
 			</a>
 			<a class="loja-opcao" data-loja="sap" href="#" target="_blank" rel="noopener">
 				<svg aria-hidden="true"><use href="#i-wa"/></svg>
-				<!-- PERSONALIZAR: endereço da loja de Santo Antônio -->
-				<span><b>Santo Antônio da Patrulha</b><small>Santo Antônio da Patrulha, RS</small></span>
+				<span><b>Santo Antônio da Patrulha</b><small>Acabamentos</small></span>
+			</a>
+			<a class="loja-opcao" data-loja="imbe" href="#" target="_blank" rel="noopener">
+				<svg aria-hidden="true"><use href="#i-wa"/></svg>
+				<span><b>Imbé</b><small>Acabamentos e material de construção</small></span>
 			</a>
 		</div>
 	</div>
@@ -893,11 +915,12 @@ body.modal-aberto { overflow: hidden; }
    PERSONALIZAR: WhatsApp de cada loja (55 + DDD + número, só dígitos).
    Todo clique num botão de WhatsApp pergunta a loja (a última escolhida
    aparece marcada). Link de anúncio já com a loja definida pula a pergunta:
-   ?loja=tramandai ou ?loja=sap
+   ?loja=tramandai, ?loja=sap ou ?loja=imbe
    ===================================================================== */
 var LOJAS = {
 	tramandai: { nome: 'Tramandaí', numero: '5551995093190' }, /* WA-TRAMANDAI */
-	sap: { nome: 'Santo Antônio da Patrulha', numero: '5551995093190' } /* WA-SAP: trocar pelo número da loja de Santo Antônio */
+	sap: { nome: 'Santo Antônio da Patrulha', numero: '5551995093190' }, /* WA-SAP: trocar pelo número da loja de Santo Antônio */
+	imbe: { nome: 'Imbé', numero: '5551995093190' } /* WA-IMBE: trocar pelo número da Carvalho Materiais de Construção */
 };
 var WHATSAPP_MENSAGEM = 'Oi, vim pelo site e quero falar com um especialista.';
 
