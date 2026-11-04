@@ -58,10 +58,14 @@
 }
 </script>
 
-<!-- Fontes da identidade visual: Sora (títulos) e Montserrat (textos) -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Sora:wght@400;600;700;800&display=swap">
+<!-- Fontes da identidade visual (Sora e Montserrat), hospedadas no próprio site -->
+<link rel="preload" href="fonts/sora.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/montserrat.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" as="image" href="img/hero-800-c8ac21ba.webp" imagesrcset="img/hero-800-c8ac21ba.webp 800w, img/hero-2dcc54b8.webp 1400w" imagesizes="(max-width: 860px) 92vw, 46vw" fetchpriority="high">
+<style>
+@font-face { font-family: "Sora"; src: url("fonts/sora.woff2") format("woff2"); font-weight: 100 800; font-style: normal; font-display: swap; }
+@font-face { font-family: "Montserrat"; src: url("fonts/montserrat.woff2") format("woff2"); font-weight: 100 900; font-style: normal; font-display: swap; }
+</style>
 
 <!-- =====================================================================
      Google Tag Manager (GTM-KVXDDMT6). Google Ads, GA4 e pixel da Meta
@@ -69,7 +73,14 @@
      Cada clique no WhatsApp envia o evento "clique_whatsapp" pro dataLayer
      (com wa_origem = qual botão), e o play do vídeo envia "video_play".
      ===================================================================== -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-KVXDDMT6');</script>
+<script>
+/* GTM carrega logo após a página aparecer (ou no primeiro toque/rolagem), pra não travar a primeira tela.
+   Cliques que acontecerem antes ficam na fila do dataLayer e são enviados quando o GTM carregar. */
+(function(w,d,i){w.dataLayer=w.dataLayer||[];w.dataLayer.push({'gtm.start':new Date().getTime(),event:'gtm.js'});var ok=false;
+function carregar(){if(ok)return;ok=true;var j=d.createElement('script');j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i;d.head.appendChild(j);}
+['scroll','touchstart','pointerdown','keydown'].forEach(function(e){w.addEventListener(e,carregar,{once:true,passive:true});});
+w.addEventListener('load',function(){setTimeout(carregar,1500);});})(window,document,'GTM-KVXDDMT6');
+</script>
 
 <style>
 /* =====================================================================
@@ -503,7 +514,7 @@ body.modal-aberto { overflow: hidden; }
 <header class="topo">
 	<div class="container">
 		<!-- PERSONALIZAR: logo (versão clara, pra fundo escuro) -->
-		<img class="topo-logo" src="img/logo-d8791ffc.png" alt="Carvalho Acabamentos" width="720" height="150">
+		<img class="topo-logo" src="img/logo-20cc7694.webp" alt="Carvalho Acabamentos" width="720" height="150">
 		<a class="topo-link js-wa" data-origem="topo" href="https://wa.me/5551995093190?text=Oi%2C%20vim%20do%20site." target="_blank" rel="noopener">
 			<svg aria-hidden="true"><use href="#i-wa"/></svg><span>Falar no WhatsApp</span>
 		</a>
@@ -537,7 +548,7 @@ body.modal-aberto { overflow: hidden; }
 		</div>
 		<figure class="hero-foto revelar" data-atraso="2">
 			<!-- PERSONALIZAR: foto principal (troque o src por uma URL ou outro arquivo) -->
-			<img src="img/hero-2dcc54b8.webp" alt="Showroom da Carvalho Acabamentos em Tramandaí, com parede verde, painel de mármore e o símbolo CA" width="1400" height="788">
+			<img src="img/hero-800-c8ac21ba.webp" srcset="img/hero-800-c8ac21ba.webp 800w, img/hero-2dcc54b8.webp 1400w" sizes="(max-width: 860px) 92vw, 46vw" fetchpriority="high" decoding="async" alt="Showroom da Carvalho Acabamentos em Tramandaí, com parede verde, painel de mármore e o símbolo CA" width="1400" height="788">
 			<figcaption class="hero-cartao">
 				<img src="img/symbol-b8b1fb87.png" alt="" width="48" height="48">
 				<span><b>Frota própria</b><small>Entrega rápida, do nosso depósito pra sua obra</small></span>
@@ -563,7 +574,7 @@ body.modal-aberto { overflow: hidden; }
 		<div class="video-moldura revelar" data-atraso="1">
 			<!-- PERSONALIZAR: ID do vídeo no YouTube (o que vem depois de "shorts/" ou "watch?v="), em data-yt e no href -->
 			<a class="yt-fachada" id="yt-fachada" data-yt="E8parIvpCdo" href="https://www.youtube.com/shorts/E8parIvpCdo" target="_blank" rel="noopener" aria-label="Assistir ao vídeo institucional da Carvalho Acabamentos">
-				<img src="img/yt_poster-b19c809d.webp" loading="lazy" decoding="async" alt="" width="720" height="1280">
+				<img src="img/yt_poster-a3f1bd09.webp" loading="lazy" decoding="async" alt="" width="720" height="1280">
 				<span class="yt-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M8 5.5v13l11-6.5z"/></svg></span>
 			</a>
 		</div>
@@ -590,8 +601,8 @@ body.modal-aberto { overflow: hidden; }
 			     ============================================================= -->
 			<div class="galeria revelar" data-galeria aria-roledescription="carrossel" aria-label="Fotos do estoque">
 				<ul class="galeria-trilho">
-					<li class="galeria-slide"><img src="img/estoque_aereo-275e013d.webp" alt="Vista aérea do Centro de Distribuição da Carvalho Acabamentos" width="1218" height="1291"></li>
-					<li class="galeria-slide"><img src="img/estoque_interno-18920b4b.webp" loading="lazy" decoding="async" alt="Interior do depósito com paletes de porcelanato das marcas Delta e Pisoforte" width="1157" height="1359"></li>
+					<li class="galeria-slide"><img src="img/estoque_aereo-ca818dc6.webp" loading="lazy" decoding="async" alt="Vista aérea do Centro de Distribuição da Carvalho Acabamentos" width="1218" height="1291"></li>
+					<li class="galeria-slide"><img src="img/estoque_interno-2aee7493.webp" loading="lazy" decoding="async" alt="Interior do depósito com paletes de porcelanato das marcas Delta e Pisoforte" width="1157" height="1359"></li>
 				</ul>
 				<button class="galeria-seta galeria-seta--ant" type="button" aria-label="Foto anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
 				<button class="galeria-seta galeria-seta--prox" type="button" aria-label="Próxima foto"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
@@ -773,7 +784,7 @@ body.modal-aberto { overflow: hidden; }
 			</article>
 			<article class="loja-card revelar" data-atraso="1">
 				<div class="loja-fotos">
-					<img src="img/loja_sap-0c8f09a9.webp" loading="lazy" decoding="async" alt="Fachada da Carvalho Acabamentos em Santo Antônio da Patrulha">
+					<img src="img/loja_sap-1a14240c.webp" loading="lazy" decoding="async" alt="Fachada da Carvalho Acabamentos em Santo Antônio da Patrulha">
 				</div>
 				<div class="loja-info">
 					<h3>Santo Antônio da Patrulha</h3>
@@ -784,7 +795,7 @@ body.modal-aberto { overflow: hidden; }
 			</article>
 			<article class="loja-card revelar" data-atraso="2">
 				<div class="loja-fotos">
-					<img class="foco-baixo" src="img/loja_imbe-bf964f5a.webp" loading="lazy" decoding="async" alt="Vista aérea da Carvalho Materiais de Construção em Imbé, com a frota de caminhões">
+					<img class="foco-baixo" src="img/loja_imbe-dfb9441a.webp" loading="lazy" decoding="async" alt="Vista aérea da Carvalho Materiais de Construção em Imbé, com a frota de caminhões">
 				</div>
 				<div class="loja-info">
 					<h3>Imbé</h3>
@@ -861,7 +872,7 @@ body.modal-aberto { overflow: hidden; }
 
 <footer class="rodape">
 	<div class="container">
-		<img src="img/logo-d8791ffc.png" alt="Carvalho Acabamentos" width="720" height="150">
+		<img src="img/logo-20cc7694.webp" alt="Carvalho Acabamentos" width="720" height="150">
 		<nav aria-label="Redes sociais">
 			<!-- PERSONALIZAR: redes sociais -->
 			<a href="https://www.instagram.com/carvalhoacabamentosrs/" target="_blank" rel="noopener">Instagram</a>
